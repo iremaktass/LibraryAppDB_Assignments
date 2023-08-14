@@ -4,10 +4,15 @@ import com.library.utility.Driver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
 public class BookPage extends BasePage {
+
+    public BookPage() {
+        PageFactory.initElements(Driver.getDriver(), this);
+    }
 
     @FindBy(xpath = "//table/tbody/tr")
     public List<WebElement> allRows;
@@ -48,6 +53,9 @@ public class BookPage extends BasePage {
     @FindBy(id = "description")
     public WebElement description;
 
+    public void bookSearch(String bookName){
+        search.sendKeys(bookName);
+    }
 
 
     public WebElement editBook(String book) {
@@ -60,6 +68,14 @@ public class BookPage extends BasePage {
         return Driver.getDriver().findElement(By.xpath(xpath));
     }
 
+    public WebElement borrowBook2(String book) {
+        String xpath = "//a[@onclick = 'Books.borrow_book(13240)']";
+        return Driver.getDriver().findElement(By.xpath(xpath));
+    }
 
+    public String getBookInfo(String infoName){
+        String locator="//form[@id='edit_book_form']//label[.='"+infoName+"']/../input";
+        return Driver.getDriver().findElement(By.xpath(locator)).getAttribute("value");
+    }
 
 }
