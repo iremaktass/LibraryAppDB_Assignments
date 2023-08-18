@@ -43,3 +43,18 @@ where name = 'ExpectedName';
 select name from books
 join book_borrow bb on books.id = bb.book_id
 join users u on u.id = bb.user_id;
+
+-- US08
+select count(*) from users
+where status = 'INACTIVE';
+
+-- how many INACTIVE AND ACTIVE users we have
+
+select count(*) from users
+where status = 'INACTIVE'
+union all
+select count(*) from users
+where status = 'ACTIVE';
+
+select status, count(*) from users
+group by status;

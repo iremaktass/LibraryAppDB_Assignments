@@ -1,11 +1,15 @@
 package com.library.steps;
 
+import com.library.pages.LoginPage;
+import com.library.pages.UserPage;
+import com.library.utility.BrowserUtil;
 import com.library.utility.DB_Util;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.plugin.event.Node;
 import org.junit.Assert;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
@@ -67,5 +71,39 @@ public class UserStepDef {
 
         Assert.assertEquals(expectedColumns,actualColumnList);
 
+    }
+
+    // US08
+
+    UserPage userPage = new UserPage();
+
+    @When("the user selected status {string}")
+    public void the_user_selected_status(String status) {
+
+        BrowserUtil.waitFor(2);
+
+        BrowserUtil.selectOptionDropdown(userPage.statusDropdown, status);
+
+    }
+
+    String actualUsersCount;
+    @When("the gets number of users")
+    public void the_gets_number_of_users() {
+        BrowserUtil.waitFor(2);
+
+        System.out.println(userPage.getUserCount());
+        actualUsersCount = userPage.getUserCount();
+
+    }
+    @Then("verify {string} status users count matching with DB")
+    public void verify_status_users_count_matching_with_db(String status) {
+
+        String query = "select count(*) from users where status = '"+status+"'";
+
+        DB_Util.runQuery(query);
+
+        String expectedUsersCount = DB_Util.getFirstRowFirstColumn();
+
+        Assert.assertEquals(expectedUsersCount, actualUserCount );
     }
 }
